@@ -1,0 +1,30 @@
+{
+    "shoes": {
+        "running": [
+            { "name": "Running Shoe 1", "price": "$50","img": "/img/prod-1.jpg" },
+            { "name": "Running Shoe 2", "price": "$60","img": "/img/prod-1.jpg" }
+        ],
+        "sneakers": [
+            { "name": "Sneaker 1", "price": "$70" ,"img": "/img/prod-1.jpg"},
+            { "name": "Sneaker 2", "price": "$80","img": "/img/prod-1.jpg" }
+        ],
+        "formal": [
+            { "name": "Formal Shoe 1", "price": "$90" ,"img": "/img/prod-1.jpg"},
+            { "name": "Formal Shoe 2", "price": "$100","img": "/img/prod-1.jpg" }
+        ]
+    },
+    "clothes": {
+        "tshirts": [
+            { "name": "T-Shirt 1", "price": "$20","img": "/img/prod-1.jpg" },
+            { "name": "T-Shirt 2", "price": "$25","img": "/img/prod-1.jpg" }
+        ],
+        "jackets": [
+            { "name": "Jacket 1", "price": "$100","img": "/img/prod-1.jpg" },
+            { "name": "Jacket 2", "price": "$120","img": "/img/prod-1.jpg" }
+        ],
+        "jeans": [
+            { "name": "Jeans 1", "price": "$40","img": "/img/prod-1.jpg" },
+            { "name": "Jeans 2", "price": "$50" ,"img": "/img/prod-1.jpg"}
+        ]
+    }
+}

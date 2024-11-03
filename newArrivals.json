@@ -1,0 +1,116 @@
+{
+    "newProducts": [
+      {
+        "name": "Product 1",
+        "img": "/img/prod-1.jpg",
+        "price": 29.99,
+        "description": "High-quality product for everyday use",
+        "category": "men"
+      },
+      {
+        "name": "Product 2",
+        "img": "/img/prod-1.jpg",
+        "price": 39.99,
+        "description": "Stylish and comfortable",
+        "category": "damen"
+      },
+      {
+        "name": "Product 3",
+        "img": "/img/prod-1.jpg",
+        "price": 24.99,
+        "description": "Perfect for any occasion",
+        "category": "man"
+      },
+      {
+        "name": "Product 4",
+        "img": "/img/prod-1.jpg",
+        "price": 34.99,
+        "description": "Durable and fashionable",
+        "category": "damen"
+      },
+      {
+        "name": "Product 5",
+        "img": "/img/prod-1.jpg",
+        "price": 45.99,
+        "description": "Elegant and trendy",
+        "category": "damen"
+      },
+      {
+        "name": "Product 6",
+        "img": "/img/prod-1.jpg",
+        "price": 29.99,
+        "description": "Casual and comfortable",
+        "category": "man"
+      },
+      {
+        "name": "Product 7",
+        "img": "/img/prod-1.jpg",
+        "price": 25.99,
+        "description": "Fun and colorful",
+        "category": "kids"
+      },
+      {
+        "name": "Product 8",
+        "img": "/img/prod-1.jpg",
+        "price": 19.99,
+        "description": "Playful and durable",
+        "category": "kids"
+      },
+      {
+        "name": "Product 9",
+        "img": "/img/prod-1.jpg",
+        "price": 29.99,
+        "description": "High-quality product for everyday use",
+        "category": "men"
+      },
+      {
+        "name": "Product 10",
+        "img": "/img/prod-1.jpg",
+        "price": 39.99,
+        "description": "Stylish and comfortable",
+        "category": "damen"
+      },
+      {
+        "name": "Product 11",
+        "img": "/img/prod-1.jpg",
+        "price": 24.99,
+        "description": "Perfect for any occasion",
+        "category": "man"
+      },
+      {
+        "name": "Product 12",
+        "img": "/img/prod-1.jpg",
+        "price": 34.99,
+        "description": "Durable and fashionable",
+        "category": "damen"
+      },
+      {
+        "name": "Product 13",
+        "img": "/img/prod-1.jpg",
+        "price": 45.99,
+        "description": "Elegant and trendy",
+        "category": "damen"
+      },
+      {
+        "name": "Product 14",
+        "img": "/img/prod-1.jpg",
+        "price": 29.99,
+        "description": "Casual and comfortable",
+        "category": "damen"
+      },
+      {
+        "name": "Product 15",
+        "img": "/img/prod-1.jpg",
+        "price": 25.99,
+        "description": "Fun and colorful",
+        "category": "kids"
+      },
+      {
+        "name": "Product 16",
+        "img": "/img/prod-1.jpg",
+        "price": 19.99,
+        "description": "Playful and durable",
+        "category": "kids"
+      }
+    ]
+  }

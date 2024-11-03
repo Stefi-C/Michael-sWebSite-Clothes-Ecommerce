@@ -1,129 +1,119 @@
-// Navbar 
+// Navbar
 document.addEventListener('DOMContentLoaded', function () {
-    // Define the HTML structure of the navbar as a string
     const navbarHTML = `
-    <div class="navbar">
-        <div class="logo">
-            <h1>Michael's Shop</h1>
+        <div class="navbar">
+            <div class="logo">
+                <h1>Michael's Shop</h1>
+            </div>
+            <div class="navbar menu">
+                <ul class="nav">
+                    <li class="nav-item"><a href="index.html">Shop</a></li>
+                    <li class="nav-item"><a href="categories.html">Categories</a></li>
+                    <li class="nav-item"><a href="newArrivals.html">New Arrivals</a></li>
+                    <li class="nav-item"><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav-icons">
+                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-heart"></i>
+                <i class="fa-solid fa-bag-shopping"></i>
+            </div>
         </div>
-        <div class="navbar menu">
-            <ul class="nav">
-                <li class="nav-item"><a href="index.html">Shop</a></li>
-                <li class="nav-item"><a href="categories.html">Categories</a></li>
-                <li class="nav-item"><a href="newArrivals.html">New Arrivals</a></li>
-                <li class="nav-item"><a href="contact.html">Contact</a></li>
-            </ul>
-        </div>
-        <div class="nav-icons">
-            <i class="fa-solid fa-user"></i>
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-bag-shopping"></i>
-        </div>
-    </div>
     `;
-
-    // Get the container where the navbar will be inserted
-    document.getElementById('navbar-container').innerHTML = navbarHTML;
+    const navbarContainer = document.getElementById('navbar-container');
+    if (navbarContainer) navbarContainer.innerHTML = navbarHTML;
 });
 
-// Fetch products from Products.json and initialize the application
-let productsData = [];
-let productsToShow = 12; // Number of products to show initially
-let productsLoaded = 0; // Counter to track how many products are already loaded
-
-// Fetch the products from Products.json
+// Fetch products by category from Products.json
 fetch('Products.json')
     .then(response => response.json())
     .then(data => {
-        productsData = getRandomizedProducts(data);
-        displayProducts(); // Display initial set of products
-        setupScrollEvent(); // Set up scroll event for loading more products
+        const productsDataByCategory = data;
+        const productDisplay = document.getElementById('products');
+
+        if (productDisplay) {
+            // Dropdown toggle functionality
+            document.querySelectorAll('.dropdown-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    button.classList.toggle('active');
+                    const dropdownContent = button.nextElementSibling;
+                    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+                    button.setAttribute('aria-expanded', dropdownContent.style.display === 'block');
+                });
+            });
+
+            // Handle category link clicks
+            document.querySelectorAll('.dropdown-content ul li a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    const parentCategory = this.closest('.dropdown').querySelector('.dropdown-btn').textContent.toLowerCase();
+                    displayProductsByCategory(parentCategory, category);
+                });
+            });
+
+            function displayProductsByCategory(parentCategory, category) {
+                if (productsDataByCategory[parentCategory] && productsDataByCategory[parentCategory][category]) {
+                    productDisplay.innerHTML = ''; // Clear previous products
+                    const products = productsDataByCategory[parentCategory][category];
+
+                    products.forEach((product, index) => {
+                        const productCard = document.createElement('div');
+                        productCard.classList.add('product-card', index % 2 === 0 ? 'show-right' : 'show-left');
+
+                        productCard.innerHTML = `
+                            <img src="${product.img}" alt="${product.name}" class="product-image">
+                            <h3>${product.name}</h3>
+                            <p>${product.price}</p>
+                            <div class="card-icons">
+                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                <button class="buy-now-btn">Buy Now</button>
+                            </div>
+                        `;
+                        productDisplay.appendChild(productCard);
+                        setTimeout(() => productCard.classList.add('show'), 100);
+                    });
+                } else {
+                    console.warn(`Category "${parentCategory}" or subcategory "${category}" not found. Ignoring...`);
+                }
+            }
+        } else {
+            console.warn('Product display container not found. Ignoring product display functionality.');
+        }
     })
-    .catch(error => console.error('Error fetching products:', error));
+    .catch(error => console.error('Error fetching products by category:', error));
 
-// Function to randomize products
-function getRandomizedProducts(data) {
-    const allProducts = [];
-    // Combine all products from categories
-    Object.values(data).forEach(category => {
-        Object.values(category).forEach(subcategory => {
-            allProducts.push(...subcategory);
+// Fetch and display new products from newArrivals.json
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('newArrivals.json');
+        const data = await response.json();
+
+        const categories = ['damen', 'man', 'kids'];
+
+        categories.forEach(category => {
+            const container = document.querySelector(`#${category} .newProducts-container`);
+
+            if (container) {
+                const categoryProducts = data.newProducts.filter(product => product.category === category);
+                container.innerHTML = ''; // Clear any existing content
+                categoryProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+                    productCard.innerHTML = `
+                        <img src="${product.img}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="price">$${product.price}</div>
+                    `;
+                    container.appendChild(productCard);
+                });
+            } else {
+                console.warn(`Container for category "${category}" not found. Ignoring...`);
+            }
         });
-    });
-    // Shuffle products array
-    return allProducts.sort(() => Math.random() - 0.5);
-}
-
-// Function to display products
-function displayProducts() {
-    const productContainer = document.getElementById('product-container');
-    
-    // Load a batch of products (12 at a time)
-    for (let i = productsLoaded; i < productsLoaded + productsToShow && i < productsData.length; i++) {
-        const product = productsData[i];
-        const productCard = createProductCard(product);
-        productContainer.appendChild(productCard);
+    } catch (error) {
+        console.error('Error loading new arrivals:', error);
     }
-
-    productsLoaded += productsToShow; // Increment the number of products loaded
-    checkVisibleCards(); // Check if the new cards are visible
-}
-
-// Function to create a product card
-function createProductCard(product) {
-    const productCard = document.createElement('div');
-    productCard.classList.add('product-card');
-    
-    // Create the product card structure
-    productCard.innerHTML = `
-        <img src="${product.img}" alt="${product.name}" class="product-image">
-        <h3>${product.name}</h3>
-        <p>${product.price}</p>
-        <div class="card-icons">
-            <i class="fa fa-heart" aria-hidden="true"></i>
-            <i class="fa fa-cart-plus" aria-hidden="true"></i>
-            <button class="buy-now-btn">Buy Now</button>
-        </div>
-    `;
-    
-    return productCard;
-}
-
-// Function to check if product cards are in the viewport
-function checkVisibleCards() {
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 100) {
-            card.classList.add('show'); // Show card when it comes into view
-        }
-    });
-}
-
-// Function to set up scroll event for loading more products
-function setupScrollEvent() {
-    const productContainer = document.getElementById('product-container');
-    productContainer.addEventListener('scroll', function () {
-        if (productContainer.scrollTop + productContainer.clientHeight >= productContainer.scrollHeight - 50) {
-            // Trigger loading more products when close to the bottom
-            displayProducts(); 
-        }
-    });
-
-    // Also handle window scroll for loading more products
-    window.addEventListener('scroll', handleScroll);
-}
-
-// Function to detect when the user scrolls near the bottom of the page
-function handleScroll() {
-    const scrollPosition = window.innerHeight + window.scrollY;
-    const documentHeight = document.body.offsetHeight;
-
-    if (scrollPosition >= documentHeight - 100) {
-        // Load more products when near the bottom
-        displayProducts();
-    }
-}
-
-// Trigger checkVisibleCards when the page is first loaded
-window.addEventListener('load', checkVisibleCards);
+});

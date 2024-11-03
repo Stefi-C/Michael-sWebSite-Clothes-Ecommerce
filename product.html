@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Product - E-commerce</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://kit.fontawesome.com/36ca5abeae.js" crossorigin="anonymous"></script>
+    </head>
+<body>
+    <div id="navbar-container"></div>
+    <div id="product-details-container"></div>
+    <div id="similar-products-container"></div>
+    
+
+
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (productId) {
+                try {
+                    const response = await fetch('products.json');
+                    if (!response.ok) throw new Error('Failed to fetch products');
+                    const data = await response.json();
+
+                    // Flatten products array
+                    const products = data.products;
+
+                    // Log all products to check their structure and IDs
+                    console.log('All Products:', products);
+
+                    // Find the selected product
+                    const product = products.find(p => p.id == productId); // Use == to compare number and string
+                    console.log('Selected Product:', product); // Log the selected product
+
+                    if (product) {
+                        displayProductDetails(product);
+                        displaySimilarProducts(products, product.category, product.id); // Pass product.id to exclude it
+                    } else {
+                        console.error('Product not found');
+                    }
+                } catch (error) {
+                    console.error('Error fetching products:', error);
+                }
+            } else {
+                console.warn('No product ID found in URL');
+            }
+        });
+
+        function displayProductDetails(product) {
+            const container = document.getElementById('product-details-container');
+            container.innerHTML = `
+                <img src="${product.img}" alt="${product.name}" class="product-image">
+                <h1>${product.name}</h1>
+                <p>${product.price}</p>
+                <p>${product.description}</p>
+                <button class="add-to-cart-btn">Add to Cart</button>
+                <button class="add-to-wishlist-btn">Add to Wishlist</button>
+            `;
+        }
+
+        function displaySimilarProducts(allProducts, category, currentProductId) {
+            const similarProductsContainer = document.getElementById('similar-products-container');
+            const similarProducts = allProducts.filter(p => p.category === category && p.id !== currentProductId);
+            similarProducts.forEach(similarProduct => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('similar-product-card');
+                productCard.innerHTML = `
+                    <img src="${similarProduct.img}" alt="${similarProduct.name}">
+                    <h3>${similarProduct.name}</h3>
+                    <p>${similarProduct.price}</p>
+                `;
+                productCard.addEventListener('click', () => {
+                    window.location.href = `product.html?id=${similarProduct.id}`;
+                });
+                similarProductsContainer.appendChild(productCard);
+            });
+        }
+    </script>
+</body>
+</html>
